@@ -1,0 +1,57 @@
+<!-- frontend/index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pack & Go</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">Pack &amp; Go</div>
+    <div class="nav-actions">
+      <button id="explainBtn" class="btn-info" aria-haspopup="dialog" title="What does the dashboard show?">What’s the dashboard?</button>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="overlay"></div>
+
+    <div class="hero-content" role="main">
+      <h1>Your Personal Packing Essentials Guide</h1>
+      <p class="subtitle">Get weather-based packing suggestions & local fashion trends</p>
+
+    <div class="hero-center">
+      <h1>Pack & Go</h1>
+      <p>Find fashion trends & packing ideas for any city</p>
+      <a href="dashboard.html" class="big-btn">Open Dashboard</a>
+    </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>© <span id="year"></span> Pack &amp; Go</p>
+  </footer>
+
+  <!-- Modal -->
+  <div id="explainModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
+    <div class="modal-inner" role="document">
+      <button class="modal-close" id="closeExplain" aria-label="Close">&times;</button>
+      <h2 id="modalTitle">What the Dashboard Shows</h2>
+      <p>The dashboard helps you pack and plan by combining:</p>
+      <ul>
+        <li><strong>Local Fashion Trends:</strong> what locals tend to wear (categories/colors/items).</li>
+        <li><strong>Packing Recommendations:</strong> a checklist tailored to weather + trends.</li>
+        <li><strong>Weather Summary:</strong> current temperature, description, humidity and rain indicator.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+

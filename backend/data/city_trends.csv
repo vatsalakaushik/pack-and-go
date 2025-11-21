@@ -1,0 +1,12 @@
+city,country,region,top_categories,top_colors,top_items,example_image_url,trend_score
+Amsterdam,Netherlands,Europe,"jacket;scarf;ankle boots","black;brown;navy","denim jacket;wool scarf;ankle boots","https://picsum.photos/seed/amsterdam/600/300",89
+Mumbai,India,Asia,"kurta;light-top;sandals","white;blue;pastel","cotton kurta;light shirt;sandals","https://picsum.photos/seed/mumbai/600/300",82
+New York,USA,North America,"coat;jeans;sneakers","black;grey;denim","wool coat;straight jeans;sneakers","https://picsum.photos/seed/ny/600/300",92
+London,UK,Europe,"raincoat;umbrella;boots","black;olive;navy","raincoat;rubber boots;umbrella","https://picsum.photos/seed/london/600/300",88
+Tokyo,Japan,Asia,"coat;wide-jeans;mask","grey;navy;black","trench coat;wide jeans;canvas sneakers","https://picsum.photos/seed/tokyo/600/300",85
+Paris,France,Europe,"coat;scarf;heels","beige;black;red","wool coat;silk scarf;ankle boots","https://picsum.photos/seed/paris/600/300",87
+Sydney,Australia,Oceania,"t-shirt;shorts;hat","white;blue;khaki","t-shirt;casual shorts;bucket hat","https://picsum.photos/seed/sydney/600/300",80
+Cairo,Egypt,Africa,"light layers;headscarf;sandals","beige;white;tan","linen shirt;light trousers;sandals","https://picsum.photos/seed/cairo/600/300",78
+Berlin,Germany,Europe,"jacket;boots;beanie","black;olive;brown","bomber jacket;ankle boots;beanie","https://picsum.photos/seed/berlin/600/300",86
+Seoul,South Korea,Asia,"layered tops;jeans;sneakers","black;grey;denim","oversized jacket;skinny jeans;sneakers","https://picsum.photos/seed/seoul/600/300",84
+

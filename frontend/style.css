@@ -1,0 +1,150 @@
+:root{
+  --cta:#00aaff;
+  --cta-dark:#0088cc;
+  --overlay: rgba(6,18,25,0.46);
+  --text:#fff;
+  --muted: rgba(255,255,255,0.85);
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family: "Segoe UI", Roboto, Arial, sans-serif;background:#111;color:var(--text)}
+.muted{color:rgba(0,0,0,0.6)}
+
+/* NAV */
+.navbar{
+  position:fixed;top:0;left:0;right:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 40px;z-index:40
+}
+.logo{font-weight:800;letter-spacing:1px;font-size:20px;color:var(--text)}
+.nav-actions .btn-info,#explainBtn{
+  background:transparent;border:1px solid rgba(255,255,255,0.12);
+  color:var(--text);padding:8px 10px;border-radius:6px;cursor:pointer
+}
+.nav-actions .btn-info:hover,#explainBtn:hover{
+  background:rgba(255,255,255,0.04)
+}
+
+/* HERO */
+.hero{
+  position:relative;height:92vh;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;margin-top:0
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80');
+  background-size:cover;background-position:center center;
+  transition:filter .35s ease, transform .6s ease;
+  z-index:1;transform:scale(1)
+}
+.overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0.48) 0%, rgba(0,0,0,0.46) 60%);
+  z-index:2
+}
+.hero.blurred .hero-bg{
+  filter:blur(6px) saturate(0.95);transform:scale(1.02)
+}
+.hero-content{
+  position:relative;z-index:3;text-align:center;
+  padding:30px;max-width:1000px
+}
+.hero-content h1{font-size:56px;margin:0 0 12px;line-height:1.02}
+.subtitle{font-size:18px;margin-bottom:24px;color:var(--muted)}
+.search-box{display:inline-flex;gap:10px;align-items:center}
+.search-box input{
+  width:420px;padding:14px 16px;border-radius:6px;
+  border:none;font-size:16px
+}
+.search-box .cta{
+  padding:12px 22px;border-radius:8px;border:none;
+  background:var(--cta);color:#fff;font-weight:700;
+  cursor:pointer;transition:all .18s ease;
+  box-shadow:0 6px 20px rgba(0,170,255,0.12)
+}
+.search-box .cta:hover{
+  background:var(--cta-dark);transform:translateY(-2px)
+}
+
+/* footer */
+footer{position:relative;z-index:3;text-align:center;padding:24px 12px;color:rgba(255,255,255,0.7)}
+
+/* modal */
+.modal{
+  position:fixed;inset:0;display:none;
+  align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.45);z-index:120
+}
+.modal[aria-hidden="false"]{display:flex}
+.modal-inner{
+  background:#fff;color:#222;padding:22px;border-radius:10px;
+  max-width:720px;width:calc(100% - 40px);
+  box-shadow:0 12px 40px rgba(0,0,0,0.25);position:relative
+}
+.modal-inner h2{margin-top:0}
+.modal-close{
+  position:absolute;right:10px;top:6px;background:transparent;
+  border:0;font-size:28px;line-height:1;cursor:pointer;color:#444
+}
+.modal-inner ul{margin-top:8px}
+
+/* print styling for minimal PDF */
+@media print {
+  body * { visibility: hidden }
+  .printable, .printable * { visibility: visible }
+  .printable {position: absolute; left: 0; top: 0; width: 100%}
+  header, footer { display: none }
+}
+
+.big-btn {
+    display: inline-block;
+    background: #ffffff;
+    color: #666;
+    padding: 14px 36px;
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 12px;
+    border: 1px solid #e6e6e6;
+    transition: all .3s ease;
+    position: relative;
+    z-index: 5;
+}
+
+/* Hover effects */
+.big-btn:hover {
+    color: #008cff;
+    background: rgba(255, 255, 255, 0.85);
+    transform: scale(1.06);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* Hero background blur on hover */
+.big-btn:hover ~ #heroBg,
+.big-btn:hover ~ .hero-bg,
+.big-btn:hover + .overlay {
+    filter: blur(6px);
+}
+
+/* If blur does not apply, use this direct selector */
+.hero:hover #heroBg {
+    transition: .3s ease;
+}
+
+.back-btn {
+    background: #ffffff !important;
+    border: 1px solid #dcdcdc !important;
+    color: #222 !important;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+.back-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+}
+

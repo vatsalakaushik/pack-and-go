@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard — Pack & Go</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      margin:0;
+      background:#1e1f22; /* dark grey like chatgpt */
+      color:#f5f5f5;
+      font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    }
+
+    .dash-header {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:flex-start;
+      max-width:1100px;
+      margin:22px auto;
+      padding:0 12px;
+    }
+
+    .dash-left{display:flex;gap:12px;align-items:center}
+
+    /* BACK BUTTON – WHITE, ROUNDED */
+    .back-btn{
+      background:#ffffff;
+      border:1px solid #dcdcdc;
+      color:#222;
+      padding:8px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:14px;
+      transition:all .2s ease;
+    }
+    .back-btn:hover{
+      background:#f5f5f5;
+      transform:translateY(-1px);
+      box-shadow:0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .dash-wrap{
+      max-width:1100px;
+      margin:6px auto 16px;
+      padding:12px;
+    }
+
+    .flex{display:flex;gap:20px;align-items:flex-start}
+    .left{flex:1}
+    .right{flex:1}
+
+    .card{
+      background:#ffffff;
+      border-radius:8px;
+      padding:14px;
+      box-shadow:0 6px 18px rgba(12,20,30,0.35);
+      color:#222;
+    }
+
+    .pack-list{list-style:none;margin:0;padding:0}
+    .pack-list li{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-bottom:1px solid #f1f1f1;
+      cursor:pointer
+    }
+    .pack-list li svg{width:22px;height:22px;flex:0 0 22px}
+
+    .controls{display:flex;gap:8px;align-items:center;margin-top:8px}
+    .controls button{
+      padding:8px 10px;
+      border-radius:6px;
+      border:1px solid #ddd;
+      background:#fff;
+      cursor:pointer;
+      font-family:inherit;
+    }
+
+    /* DASHBOARD IFRAME */
+    #dashboardFrame{
+      width:100%;
+      height:700px;
+      border:0;
+      border-radius:10px;
+      overflow:hidden;
+      background:#fff;
+    }
+
+    .weather-band{
+      max-width:1100px;
+      margin:20px auto;
+      padding:16px;
+      border-radius:8px;
+      background:linear-gradient(90deg,#ffffff,#f5f7fb);
+      box-shadow:0 6px 18px rgba(12,20,30,0.35);
+      display:flex;
+      gap:18px;
+      align-items:center;
+      color:#222;
+    }
+    .weather-item{display:flex;flex-direction:column}
+    .weather-item .large{font-weight:700;font-size:22px}
+    .weather-item select{
+      padding:6px 10px;
+      border-radius:6px;
+      border:1px solid #ccc;
+      font-family:inherit;
+      font-size:14px;
+    }
+
+    @media (max-width:900px){
+      .flex{flex-direction:column}
+      .left{flex:unset}
+      #dashboardFrame{height:420px}
+      .weather-band{flex-direction:column;align-items:flex-start}
+    }
+
+    .printable { background:white;color:black; }
+  </style>
+</head>
+<body>
+  <header class="dash-header" role="banner">
+    <div class="dash-left">
+      <button id="backBtn" class="back-btn" aria-label="Back to search">← Back</button>
+      <div>
+        <div style="font-weight:700;color:#f5f5f5">Pack &amp; Go</div>
+        <div class="muted" id="subCity" style="font-size:13px;color:#c7c7c7">Select a city below</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="dash-wrap" role="main">
+    <h2 id="dashTitle" style="color:#f5f5f5">Dashboard</h2>
+
+    <!-- BIG DASHBOARD CARD ON TOP, SINGLE TABLEAU VIEW -->
+    <div class="card" style="margin-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <h4 style="margin:0">Local Dashboard</h4>
+        <!-- small summary text -->
+        <div class="muted" id="weatherSummary" style="font-size:13px;color:#555;"></div>
+      </div>
+
+      <!-- Only one Tableau dashboard: user changes tabs inside Tableau -->
+      <iframe 
+        id="dashboardFrame"
+        src="https://public.tableau.com/views/SeasonalPreferences_17636448129230/SeasonalPreferences?:embed=yes&:showVizHome=no"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- ROW OF LIST CARDS BELOW THE DASHBOARD -->
+    <div class="flex" style="margin-top:16px">
+      <div class="left">
+        <div class="card">
+          <h4 style="margin-top:0">Packing List</h4>
+          <ul id="packList" class="pack-list" aria-live="polite"></ul>
+
+          <div class="controls">
+            <button id="copyBtn">Copy</button>
+            <button id="csvBtn">Download CSV</button>
+            <button id="printBtn">Save / Print</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="card">
+          <h4 style="margin-top:0">My Own List</h4>
+          <p class="muted" style="margin-top:0;font-size:12px;color:#555">
+            Write anything you want to remember to pack. You can download or copy it.
+          </p>
+          <textarea id="customList" rows="8" style="width:100%;resize:vertical;padding:8px;border-radius:6px;border:1px solid #ddd;font-size:13px;"></textarea>
+
+          <div class="controls">
+            <button id="customCopyBtn">Copy Text</button>
+            <button id="customDownloadBtn">Download TXT</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- WEATHER STRIP WITH CITY DROPDOWN -->
+  <div class="weather-band" id="weatherBand" style="display:none">
+    <div class="weather-item">
+      <div class="muted">City</div>
+      <select id="weatherCitySelect">
+        <!-- Europe -->
+        <option value="London">London</option>
+        <option value="Paris">Paris</option>
+        <option value="Amsterdam">Amsterdam</option>
+        <option value="Berlin">Berlin</option>
+        <option value="Munich">Munich</option>
+        <option value="Hamburg">Hamburg</option>
+        <option value="Madrid">Madrid</option>
+        <option value="Barcelona">Barcelona</option>
+        <option value="Valencia">Valencia</option>
+        <option value="Lisbon">Lisbon</option>
+        <option value="Porto">Porto</option>
+        <option value="Rome">Rome</option>
+        <option value="Milan">Milan</option>
+        <option value="Florence">Florence</option>
+        <option value="Venice">Venice</option>
+        <option value="Vienna">Vienna</option>
+        <option value="Prague">Prague</option>
+        <option value="Budapest">Budapest</option>
+        <option value="Warsaw">Warsaw</option>
+        <option value="Copenhagen">Copenhagen</option>
+        <option value="Stockholm">Stockholm</option>
+        <option value="Oslo">Oslo</option>
+        <option value="Helsinki">Helsinki</option>
+        <option value="Zurich">Zurich</option>
+        <option value="Geneva">Geneva</option>
+        <option value="Brussels">Brussels</option>
+
+        <!-- North America -->
+        <option value="New York">New York</option>
+        <option value="Los Angeles">Los Angeles</option>
+        <option value="Chicago">Chicago</option>
+        <option value="San Francisco">San Francisco</option>
+        <option value="Toronto">Toronto</option>
+        <option value="Vancouver">Vancouver</option>
+        <option value="Montreal">Montreal</option>
+        <option value="Mexico City">Mexico City</option>
+
+        <!-- South America -->
+        <option value="Sao Paulo">São Paulo</option>
+        <option value="Rio de Janeiro">Rio de Janeiro</option>
+        <option value="Buenos Aires">Buenos Aires</option>
+
+        <!-- Asia -->
+        <option value="Dubai">Dubai</option>
+        <option value="Singapore">Singapore</option>
+        <option value="Tokyo">Tokyo</option>
+        <option value="Osaka">Osaka</option>
+        <option value="Seoul">Seoul</option>
+        <option value="Hong Kong">Hong Kong</option>
+        <option value="Shanghai">Shanghai</option>
+        <option value="Beijing">Beijing</option>
+        <option value="Bangkok">Bangkok</option>
+
+        <!-- Australia & Africa -->
+        <option value="Sydney">Sydney</option>
+        <option value="Melbourne">Melbourne</option>
+        <option value="Cape Town">Cape Town</option>
+        <option value="Johannesburg">Johannesburg</option>
+
+      <!-- India (since you’re in India and it actually matters) -->
+      <option value="Delhi">Delhi</option>
+      <option value="Mumbai">Mumbai</option>
+      <option value="Bengaluru">Bengaluru</option>
+    </select>
+
+    </div>
+    <div class="weather-item">
+      <div class="large" id="wTemp">--°C</div>
+      <div class="muted" id="wDesc">--</div>
+    </div>
+    <div class="weather-item">
+      <div class="muted">Feels like</div>
+      <div id="wFeels">--°C</div>
+    </div>
+    <div class="weather-item">
+      <div class="muted">Humidity</div>
+      <div id="wHum">--%</div>
+    </div>
+    <div class="weather-item">
+      <div class="muted">Wind</div>
+      <div id="wWind">-- m/s</div>
+    </div>
+    <div class="weather-item" id="wRainWrap" style="display:none">
+      <div class="muted">Rain</div>
+      <div id="wRain">Yes</div>
+    </div>
+  </div>
+
+  <script>
+    const packListEl = document.getElementById('packList');
+    const subCity = document.getElementById('subCity');
+    const weatherSummary = document.getElementById('weatherSummary');
+    const backBtn = document.getElementById('backBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const csvBtn = document.getElementById('csvBtn');
+    const printBtn = document.getElementById('printBtn');
+    const customList = document.getElementById('customList');
+    const customCopyBtn = document.getElementById('customCopyBtn');
+    const customDownloadBtn = document.getElementById('customDownloadBtn');
+    const weatherBand = document.getElementById('weatherBand');
+    const citySelect = document.getElementById('weatherCitySelect');
+
+    let city = citySelect ? citySelect.value : 'London';
+
+    function iconFor(item){
+      const s = item.toLowerCase();
+      if (s.includes('umbrella')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M12 2C7.03 2 3 5.13 3 9c0 .39.17.75.44 1.01A3.49 3.49 0 0 0 3 13.5C3 15.99 5.01 18 7.5 18H8"></path><path d="M21 13.5c0-2.49-2.01-4.5-4.5-4.5H12"></path></svg>';
+      if (s.includes('jacket')||s.includes('coat')||s.includes('sweater')||s.includes('cardigan')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M3 6h4l1 4v8h8v-8l1-4h4"></path></svg>';
+      if (s.includes('shoe')||s.includes('boots')||s.includes('sneaker')||s.includes('sandals')||s.includes('ankle')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M3 12h6l2 6h6"></path></svg>';
+      if (s.includes('hat')||s.includes('beanie')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M12 2a7 7 0 0 1 7 7v2H5V9a7 7 0 0 1 7-7z"></path></svg>';
+      if (s.includes('sock')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M9 3v6a3 3 0 0 0 6 0V3"></path></svg>';
+      if (s.includes('scarf')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M3 12c4 2 6 2 10 0s6-2 8 0"></path></svg>';
+      if (s.includes('sunglass')||s.includes('glasses')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><circle cx="6" cy="12" r="3"/><circle cx="18" cy="12" r="3"/><path d="M9 12h6"/></svg>';
+      if (s.includes('charger')||s.includes('phone')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M12 2v8l2-2H12"></path><rect x="7" y="10" width="10" height="12" rx="2"></rect></svg>';
+      if (s.includes('tooth')) return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M6 3l1 14"></path><path d="M9 3l1 14"></path></svg>';
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2H10a2 2 0 0 0-2 2v2"/></svg>';
+    }
+
+    function capFirst(s){return s && s.length ? s[0].toUpperCase() + s.slice(1) : s;}
+
+    async function loadPackAndWeather(ci){
+      const thisCity = (ci || '').trim();
+      if (!thisCity) return;
+
+      subCity.textContent = thisCity;
+      packListEl.innerHTML = '<li>Loading...</li>';
+      weatherSummary.textContent = '';
+
+      try{
+        const resp = await fetch('/api/pack',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({city:thisCity})
+        });
+        const j = await resp.json();
+        packListEl.innerHTML = '';
+
+        let list = [];
+        if (j.trend && Array.isArray(j.trend.top_items) && j.trend.top_items.length) {
+          list = j.trend.top_items.slice(0, 5);
+        } else if (Array.isArray(j.packing_list)) {
+          list = j.packing_list;
+        }
+
+        if (!list.length) {
+          packListEl.innerHTML = '<li>No suggestions available.</li>';
+        } else {
+          list.forEach(it => {
+            const li = document.createElement('li');
+            li.innerHTML = iconFor(it) + '<span>' + capFirst(it) + '</span>';
+            li.addEventListener('click', () => {
+              li.style.textDecoration = li.style.textDecoration ? '' : 'line-through';
+            });
+            packListEl.appendChild(li);
+          });
+        }
+
+        if (j.weather && !j.weather.error) {
+          const w = j.weather;
+          weatherSummary.textContent = `${Math.round(w.temp_c)}°C · ${w.description || ''} · ${w.humidity ? w.humidity + '%' : ''}`;
+          document.getElementById('wTemp').textContent = `${Math.round(w.temp_c)}°C`;
+          document.getElementById('wDesc').textContent = (w.description || '').replace(/\b\w/g,c=>c.toUpperCase());
+          document.getElementById('wFeels').textContent = `${Math.round(w.feels_like_c)}°C`;
+          document.getElementById('wHum').textContent = (w.humidity || '-') + '%';
+          document.getElementById('wWind').textContent = (w.wind_m_s || '-') + ' m/s';
+          if (w.is_rain) {
+            document.getElementById('wRainWrap').style.display='block';
+            document.getElementById('wRain').textContent='Yes';
+          } else {
+              document.getElementById('wRainWrap').style.display='none';
+          }
+          weatherBand.style.display = 'flex';
+        } else {
+            // show the band but with a "no data" message
+            weatherSummary.textContent = 'No live weather data available for this city right now.';
+            document.getElementById('wTemp').textContent = '--°C';
+            document.getElementById('wDesc').textContent = 'No data';
+            document.getElementById('wFeels').textContent = '--°C';
+            document.getElementById('wHum').textContent = '--%';
+            document.getElementById('wWind').textContent = '--';
+            document.getElementById('wRainWrap').style.display='none';
+            weatherBand.style.display = 'flex';
+          }
+
+      }catch(e){
+        packListEl.innerHTML='<li>Error loading suggestions</li>';
+        console.error(e);
+      }
+    }
+
+    // initial load: first city in dropdown
+    loadPackAndWeather(city);
+
+    if (citySelect){
+      citySelect.addEventListener('change', () => {
+        city = citySelect.value;
+        loadPackAndWeather(city);
+      });
+    }
+
+    // back
+    backBtn.addEventListener('click',()=>{ window.location.href='/'; });
+
+    // copy
+    copyBtn.addEventListener('click',()=>{
+      const items=Array.from(packListEl.querySelectorAll('li span')).map(s=>s.textContent);
+      if(!items.length)return;
+      navigator.clipboard.writeText(items.join('\n')).then(()=>alert('Copied packing list to clipboard'));
+    });
+
+    // CSV
+    csvBtn.addEventListener('click',()=>{
+      const items=Array.from(packListEl.querySelectorAll('li span')).map(s=>s.textContent);
+      const csv='item\n'+items.map(s=>'"'+s.replace(/"/g,'""')+'"').join('\n');
+      const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download=(city+'-packing.csv');
+      document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+    });
+
+    // print
+    printBtn.addEventListener('click',()=>{
+      document.body.classList.add('printable');
+      window.print();
+      document.body.classList.remove('printable');
+    });
+
+    // custom list: copy
+    customCopyBtn.addEventListener('click', () => {
+      const text = (customList.value || '').trim();
+      if (!text) {
+        alert('Your custom list is empty.');
+        return;
+      }
+      navigator.clipboard.writeText(text)
+        .then(() => alert('Custom list copied to clipboard'))
+        .catch(() => alert('Could not copy. Please copy manually.'));
+    });
+
+    // custom list: download as TXT
+    customDownloadBtn.addEventListener('click', () => {
+      const text = (customList.value || '').trim();
+      if (!text) {
+        alert('Your custom list is empty.');
+        return;
+      }
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (city + '-my-list.txt');
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+  </script>
+</body>
+</html>
