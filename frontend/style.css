@@ -119,17 +119,21 @@ footer{position:relative;z-index:3;text-align:center;padding:24px 12px;color:rgb
     box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
-/* Hero background blur on hover */
-.big-btn:hover ~ #heroBg,
-.big-btn:hover ~ .hero-bg,
-.big-btn:hover + .overlay {
-    filter: blur(6px);
+/* Hover effects */
+.big-btn:hover {
+  color: #008cff;
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.06);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
-/* If blur does not apply, use this direct selector */
-.hero:hover #heroBg {
-    transition: .3s ease;
+/* Hero background blur when hero is hovered (includes button hover) */
+.hero:hover #heroBg,
+.hero:hover .overlay {
+  filter: blur(6px);
+  transition: filter .35s ease;
 }
+
 
 .back-btn {
     background: #ffffff !important;
@@ -146,5 +150,11 @@ footer{position:relative;z-index:3;text-align:center;padding:24px 12px;color:rgb
     background: #f5f5f5;
     transform: translateY(-1px);
     box-shadow: 0 3px 10px rgba(0,0,0,0.10);
+}
+
+body {
+    background: #1e1f22;  /* chatgpt dark mode grey */
+    color: rgba(255,255,255,0.95);
+    font-family: 'Inter', sans-serif; /* replace with classy font */
 }
 
