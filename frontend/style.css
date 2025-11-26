@@ -10,7 +10,7 @@
 body{margin:0;font-family: "Segoe UI", Roboto, Arial, sans-serif;background:#111;color:var(--text)}
 .muted{color:rgba(0,0,0,0.6)}
 
-/* NAV */
+/* nav */
 .navbar{
   position:fixed;top:0;left:0;right:0;
   display:flex;align-items:center;justify-content:space-between;
@@ -25,7 +25,7 @@ body{margin:0;font-family: "Segoe UI", Roboto, Arial, sans-serif;background:#111
   background:rgba(255,255,255,0.04)
 }
 
-/* HERO */
+/* hero */
 .hero{
   position:relative;height:92vh;display:flex;align-items:center;justify-content:center;
   overflow:hidden;margin-top:0
@@ -127,7 +127,7 @@ footer{position:relative;z-index:3;text-align:center;padding:24px 12px;color:rgb
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
-/* Hero background blur when hero is hovered (includes button hover) */
+/* Hero background blur when hero is hovered */
 .hero:hover #heroBg,
 .hero:hover .overlay {
   filter: blur(6px);
@@ -153,8 +153,8 @@ footer{position:relative;z-index:3;text-align:center;padding:24px 12px;color:rgb
 }
 
 body {
-    background: #1e1f22;  /* chatgpt dark mode grey */
+    background: #1e1f22;  
     color: rgba(255,255,255,0.95);
-    font-family: 'Inter', sans-serif; /* replace with classy font */
+    font-family: 'Inter', sans-serif; 
 }
 
