@@ -10,7 +10,7 @@
   <style>
     body{
       margin:0;
-      background:#1e1f22; /* dark grey like chatgpt */
+      background:#1e1f22; 
       color:#f5f5f5;
       font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     }
@@ -27,7 +27,7 @@
 
     .dash-left{display:flex;gap:12px;align-items:center}
 
-    /* BACK BUTTON – WHITE, ROUNDED */
+    /* back button */
     .back-btn{
       background:#ffffff;
       border:1px solid #dcdcdc;
@@ -83,7 +83,7 @@
       font-family:inherit;
     }
 
-    /* DASHBOARD IFRAME */
+    /* dashb iframe */
     #dashboardFrame{
       width:100%;
       height:700px;
@@ -139,7 +139,7 @@
   <main class="dash-wrap" role="main">
     <h2 id="dashTitle" style="color:#f5f5f5">Dashboard</h2>
 
-    <!-- BIG DASHBOARD CARD ON TOP, SINGLE TABLEAU VIEW -->
+    <!-- single tabl. view -->
     <div class="card" style="margin-top:12px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <h4 style="margin:0">Local Dashboard</h4>
@@ -147,7 +147,7 @@
         <div class="muted" id="weatherSummary" style="font-size:13px;color:#555;"></div>
       </div>
 
-      <!-- Only one Tableau dashboard: user changes tabs inside Tableau -->
+      <!-- one tabl dashb -->
       <iframe 
         id="dashboardFrame"
         src="https://public.tableau.com/views/SeasonalPreferences_17636448129230/SeasonalPreferences?:embed=yes&:showVizHome=no"
@@ -155,7 +155,7 @@
       ></iframe>
     </div>
 
-    <!-- ROW OF LIST CARDS BELOW THE DASHBOARD -->
+    <!-- row of list cards below tabl dashboard -->
     <div class="flex" style="margin-top:16px">
       <div class="left">
         <div class="card">
@@ -187,7 +187,7 @@
     </div>
   </main>
 
-  <!-- WEATHER STRIP WITH CITY DROPDOWN -->
+  <!-- city dropdown + weather strips -->
   <div class="weather-band" id="weatherBand" style="display:none">
     <div class="weather-item">
       <div class="muted">City</div>
@@ -252,7 +252,7 @@
         <option value="Cape Town">Cape Town</option>
         <option value="Johannesburg">Johannesburg</option>
 
-      <!-- India (since you’re in India and it actually matters) -->
+      <!-- India -->
       <option value="Delhi">Delhi</option>
       <option value="Mumbai">Mumbai</option>
       <option value="Bengaluru">Bengaluru</option>
@@ -366,7 +366,7 @@
           }
           weatherBand.style.display = 'flex';
         } else {
-            // show the band but with a "no data" message
+            // "no data" message
             weatherSummary.textContent = 'No live weather data available for this city right now.';
             document.getElementById('wTemp').textContent = '--°C';
             document.getElementById('wDesc').textContent = 'No data';
@@ -383,7 +383,7 @@
       }
     }
 
-    // initial load: first city in dropdown
+    // initial load
     loadPackAndWeather(city);
 
     if (citySelect){
