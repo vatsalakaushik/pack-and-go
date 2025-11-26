@@ -45,13 +45,12 @@ def fetch_weather(city):
         return {"error": "OWM_API_KEY not set"}
 
     url = "https://api.openweathermap.org/data/2.5/weather"
-    # we keep it SIMPLE: only city name
     params = {"q": city, "appid": key, "units": "metric"}
 
     try:
         r = requests.get(url, params=params, timeout=10)
         if r.status_code != 200:
-            # instead of ugly error, return clear "no data" message
+            # if error, "no data" message
             return {"error": "no live weather data available for this city right now"}
 
         j = r.json()
@@ -125,7 +124,7 @@ def dashboard_url():
     Return the Tableau Public embed URL based on the selected view/tab,
     and filter by City if provided.
     """
-    view = request.args.get("view", "popular")  # popular, gender, seasonal, styles
+    view = request.args.get("view", "popular")  
     city = (request.args.get("city", "") or "").strip()
 
     base_map = {
@@ -139,10 +138,10 @@ def dashboard_url():
     if not base:
         return jsonify({"embed_url": ""})
 
-    # If user typed a city, append Tableau's City=<value> filter.
-    # Field name is exactly 'City' (case-sensitive).
+    # If user typed a city, append Tableau's City filter.
+    # Field name is exact
     if city:
-        # URL-encode the city (spaces, special chars):
+        # URL-encode:
         base = f"{base}&City={quote_plus(city)}"
 
     return jsonify({"embed_url": base})
